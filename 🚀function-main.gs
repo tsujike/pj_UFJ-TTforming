@@ -13,25 +13,15 @@ function onFormSubmit(e) {
   // itemResponsesを配列に変換
   const itemResponsesArray = itemResponses.map(itemresponse => itemresponse.getResponse())
 
-  const recipient = ""
-  const subject = ""
-  const body = itemResponsesArray
-
-  GmailApp.createDraft(recipient, subject, body);
-
   //シートには必ず貼り付け
   new TradingHistorySheet().sheet.appendRow(itemResponsesArray);
 
-  //各クライアントシートにも貼り付ける
-  // const customersKey = values[2];
-  // sheet = ss.getSheetByName(customersKey);
-  // sheet.appendRow(values);
+  //LINE通知する
+  const customerCode = itemResponsesArray[2];
+  const amountPrice = itemResponsesArray[10];
+  message = `【海外送金】\nカスタマーコード:${customerCode}\nTG口座に${amountPrice}円が入金されました💵`;
+  new LINE().sendBroadbandMessage(message);
+  console.log(message);
 
-    //LINE通知する
-    const customerCode = itemResponsesArray[2];
-    const amountPrice = itemResponsesArray[3];
-    message = `【海外送金】${customerCode}:TGに${amountPrice}が入金されました💵`;
-    new LINE().sendBroadbandMessage(message);
-    console.log(message);
 
 }
